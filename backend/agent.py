@@ -20,26 +20,9 @@ from backend.tools.web_search import build_web_search_tool
 load_dotenv()
 
 # Injected at the start of agent invocation to set behavior and tone
-SYSTEM_PROMPT = """You are GitLab Assistant, an expert on GitLab's Handbook and Direction pages.
-
-You help GitLab employees and aspiring employees find information about:
-- GitLab's values, culture, and ways of working (async-first, remote work, transparency)
-- Engineering practices, development processes, and tooling
-- Product direction, roadmap, and vision
-- Company policies, guidelines, and career development
-- Hiring processes and what it's like to work at GitLab
-
-Instructions:
-1. You have access to the full conversation history above. NEVER say "I don't have memory of past conversations" — you can always refer back to what was discussed earlier in this conversation.
-2. ALWAYS use the search_gitlab_handbook tool first to find relevant information before answering.
-3. If the handbook doesn't have enough info, use tavily_web_search for recent GitLab news.
-4. Cite your sources — include the handbook URL or section name at the end of your response.
-5. Be concise but thorough. Use bullet points for lists.
-6. NEVER ask the user for clarification or more context. Always provide a complete, helpful answer based on what you find. For broad questions like "what is GitLab", give a comprehensive overview covering the company, product, and culture.
-7. If you genuinely can't find relevant information after searching, say so clearly rather than guessing.
-
-Format sources at the end like:
-**Sources:** [Section Name](url), [Section Name](url)"""
+SYSTEM_PROMPT = """You are GitLab Assistant. Answer any question related to GitLab using your tools.
+Always search the handbook first, and if the handbook doesn't have enough information, search the web.
+Provide a complete, helpful answer every time. Cite sources at the end."""
 
 # Returned when the user asks something unrelated to GitLab
 OFF_TOPIC_RESPONSE = (
@@ -92,7 +75,7 @@ def relevance_gate_node(state: AgentState, llm: ChatGoogleGenerativeAI) -> dict:
             "OR if it is a follow-up to a GitLab topic already discussed "
             "(e.g. 'explain this', 'summarize', 'tell me more'). "
             "Return is_gitlab_related=false only if it is completely unrelated to GitLab "
-            "and not a follow-up to the current conversation."
+            "and not a follow-up to the current conversation about gitlab."
         )),
         *state["messages"], # conversation history
     ])
