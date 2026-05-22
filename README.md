@@ -22,6 +22,28 @@ A RAG-based conversational AI assistant that answers questions about GitLab's pu
 
 ---
 
+## Concurrency & Async Design
+
+The agent nodes (`relevance_gate_node`, `agent_node`) make network I/O calls — to Gemini, Pinecone, and Supabase — which involve waiting for external responses. Under high concurrency (e.g. 100 simultaneous users), these waits are the bottleneck.
+
+**Why async/await would help here:**
+Each node call blocks a thread while waiting for a network response. With `async def` nodes and `ainvoke()`/`astream()`, those waits become non-blocking — 100 users' LLM calls can be in-flight simultaneously instead of queued sequentially, reducing total response time from `100 × 2s = 200s` down to `~2s`.
+
+**Why it's not implemented here:**
+Streamlit runs on top of Tornado (an async web server) which already has a running event loop. Calling `asyncio.run()` inside Streamlit raises `RuntimeError: This event loop is already running`. Streamlit handles session-level concurrency via threads, which is sufficient for a demo and avoids this conflict.
+
+**The production upgrade path:**
+If this were deployed on an async server (FastAPI + Uvicorn), the change would be straightforward:
+- `def relevance_gate_node` → `async def relevance_gate_node` with `await llm.ainvoke()`
+- `def agent_node` → `async def agent_node` with `await llm.ainvoke()`
+- `PostgresSaver` → `AsyncPostgresSaver` with `await psycopg.AsyncConnection.connect()`
+- `graph.stream()` → `graph.astream()`
+
+LangGraph natively supports all async equivalents — the architecture is async-ready, just not wired up due to Streamlit's event loop constraint.
+
+
+
+
 ## Architecture
 
 ```
