@@ -56,7 +56,7 @@ def build_llm(streaming: bool = True) -> ChatGoogleGenerativeAI:
         model="gemini-2.0-flash",
         google_api_key=os.getenv("GOOGLE_API_KEY"),
         streaming=streaming,
-        temperature=0.1,  # low temperature = consistent, factual answers
+        temperature=0.7,  
     )
 
 
