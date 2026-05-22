@@ -1,0 +1,24 @@
+[project]
+name = "genai-chatbot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "firecrawl-py>=4.27.1",
+    "grandalf>=0.8",
+    "langchain>=1.3.1",
+    "langchain-community>=0.4.1",
+    "langchain-google-genai>=4.2.2",
+    "langchain-huggingface>=1.2.2",
+    "langchain-pinecone>=0.2.13",
+    "langgraph>=1.2.0",
+    "langgraph-checkpoint-postgres>=3.1.0",
+    "pinecone>=7.3.0",
+    "psycopg[binary]>=3.3.4",
+    "python-dotenv>=1.2.2",
+    "sentence-transformers>=5.5.1",
+    "streamlit>=1.57.0",
+    "tavily-python>=0.7.24",
+]
