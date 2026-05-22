@@ -1,3 +1,7 @@
+<img width="1690" height="1390" alt="image" src="https://github.com/user-attachments/assets/551f9bbe-3d1a-41d7-9500-8504a0ce145c" />
+
+
+
 # GenAI GitLab Chatbot
 
 A RAG-based conversational AI assistant that answers questions about GitLab's public Handbook and Direction pages. Built with LangGraph, LangChain, Streamlit, RAG (Pinecone), Human in the Loop (HITL), Supabase and LLM.
